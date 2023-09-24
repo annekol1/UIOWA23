@@ -1,41 +1,39 @@
-import React from 'react';
-import { Column, Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import SidebarComponent from './components/sidebar/SidebarComponent';
-import HeaderComponent from './components/header/HeaderComponent';
-import './App.css';
+import React, { Component } from 'react';
 
-const styles = StyleSheet.create({
-    container: {
-        height: '100vh'
-    },
-    content: {
-        marginTop: 54
-    },
-    mainBlock: {
-        backgroundColor: '#F7F8FC',
-        padding: 30
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: []
     }
-});
+  }
 
-class App extends React.Component {
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(json => this.setState({ posts: json }))
+  }
 
-    state = { selectedItem: 'Tickets' };
-
-    render() {
-        const { selectedItem } = this.state;
-        return (
-            <Row className={css(styles.container)}>
-                <SidebarComponent selectedItem={selectedItem} onChange={(selectedItem) => this.setState({ selectedItem })} />
-                <Column flexGrow={1} className={css(styles.mainBlock)}>
-                    <HeaderComponent title={selectedItem} />
-                    <div className={css(styles.content)}>
-                        <span>Content</span>
-                    </div>
-                </Column>
-            </Row>
-        );
-    }
+  render() {
+    const { posts } = this.state;
+    return (
+      <div className="container">
+        <div class="jumbotron">
+          <h1 class="display-4">SoilSensing</h1>
+        </div>
+        {posts.map((post) => (
+          <div className="card" key={post.id}>
+            <div className="card-header">
+              #{post.id} {post.title}
+            </div>
+            <div className="card-body">
+              <p className="card-text">{post.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 }
-
 export default App;
