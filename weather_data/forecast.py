@@ -1,4 +1,5 @@
 import requests
+import json
 
 def forecastData(lat, long, key):
     LONGITUDE = long
@@ -20,17 +21,12 @@ def dataToDict(data):
 
     for i in range(len(forecast_response['list'])):
         humidityForecast.append(forecast_response['list'][i]['main']['humidity'])
-    for i in range(len(forecast_response['list'])):
         temperatureForecast.append(forecast_response['list'][i]['main']['temp'])
-    for i in range(len(forecast_response['list'])):
         groundPressureForecast.append(forecast_response['list'][i]['main']['grnd_level'])
-    for i in range(len(forecast_response['list'])):
         try:
             rainForecast.append(forecast_response['list'][i]['rain']['3h'])
         except:
             rainForecast.append(0)
-
-    for i in range(len(forecast_response['list'])):
         windspeedForecast.append(forecast_response['list'][i]['wind']['speed'])
     
     forecastData['City'] = forecast_response['city']['name']
@@ -39,6 +35,8 @@ def dataToDict(data):
     forecastData['Ground Atmospheric Pressure'] = groundPressureForecast
     forecastData['Rain Volume'] = rainForecast
     forecastData['Wind Speed'] = windspeedForecast
+
+    forecastData = json.dumps(forecastData, indent = 4)
     return forecastData
 
 print(dataToDict(forecastData('45.4647222', '-98.4861111', 'c93b02653581a787ce0ce089ec79b3ae')))
