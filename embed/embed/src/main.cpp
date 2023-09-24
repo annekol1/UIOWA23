@@ -1,12 +1,13 @@
+#define LOGGING
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include <SPI.h>
-#include <WiFiNINA.h>
 #include <ArduinoHttpClient.h>
+#include <WiFiNINA.h>
 #include "secrets.h"
 #include "RollingAvg.hpp"
-#define LOGGING
 
-const char id[]            = "/650fea7c8b4ca1101fc3f2ca/data";
+const char id[]            = "/650fea7c8b4ca1101fc3f2ca/json";
 char ssid[]                = SECRET_SSID;    // your network SSID (name)
 char pass[]                = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 char server[]              = SECRET_SERVER;
@@ -14,6 +15,8 @@ uint32_t serverPort        = SECRET_PORT;
 uint32_t collectionRate_ms = 200;
 RollingAvg moistureAdc(A2, 5);
 RollingAvg lightAdc(A3, 5);
+DynamicJsonDocument doc(1024);
+char serializedBuf[500];
 
 int status = WL_IDLE_STATUS;
 
@@ -41,10 +44,16 @@ String time = "2020-03-19T14:21:00+02:00";
 
 void loop()
 {
-    //String contentType = "application/json; charset=utf-8";
-    //String postData    = "{taken:" + time + ", avgMoisture:" + moistureAdc.GetAvg() + ", avgLight:" + lightAdc.GetAvg() + ",}";
-    //httpClient.post(id, contentType, postData);
-    httpClient.get(id);
+    String contentType = "application/json; charset=utf-8";
+
+    uint8_t amtRead    = 0;
+    doc["taken"]       = time;
+    doc["avgMoisture"] = moistureAdc.GetAvg();
+    doc["avgLight"]    = lightAdc.GetAvg();
+    serializeJson(doc, Serial);
+    amtRead = serializeJson(doc, serializedBuf, 500);
+    serializedBuf[amtRead] = '\0';
+    httpClient.post(id, contentType, serializedBuf);
     int statusCode = httpClient.responseStatusCode();
     Serial.println(statusCode);
     String response = httpClient.responseBody();

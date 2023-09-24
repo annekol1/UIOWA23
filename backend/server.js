@@ -64,7 +64,7 @@ app.post("/:id/json", (req, res) => {
     typeof data.avgLight == undefined ||
     id == undefined
   ) {
-    res.status(400);
+    res.status(400).json({ data: data });
   } else {
     prisma.dataSample
       .create({
