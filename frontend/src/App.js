@@ -1,20 +1,44 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Routes, Route } from "react-router-dom";
-import Mainpage from "./pages/Mainpage";
+import React from 'react';
+import './App.css';
+//import { sqlData } from './data';
+//import LineChart from './components/LineChart';
 
 function App() {
-  var [posts, setPosts] = useState([]);
-  useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => setPosts(res.data));
-  }, []);
-
   return (
-      <Routes>
-        <Route path="/" element={<Mainpage />} />
-      </Routes>
+    <div className="App">
+      <header className="App-header">
+        <h1>Sensor Data</h1>
+      </header>
+          <div className="chart-light">
+            <Line data={chartData} />
+            <p> Moisture </p>
+          </div>  
+          <h2>Humidity graph</h2>
+          <div className="chart-moisture">
+            <Line data={chartData} />
+            <p> Light </p>
+          </div>  
+          <h2>Light graph</h2>
+          <div className="future-chart-temp">
+            <Line data={chartData} />
+            <p> Projected Tempurature </p>
+          </div>
+          <div className="future-chart-uv">
+            <Line data={chartData} />
+            <p> Projected UV Index </p>
+          </div>
+          <div className="future-chart-precip">
+            <Line data={chartData} />
+            <p> Projected Precipitation </p>
+          </div> 
+          <div class="pie">
+            <span class="overlay"></span>
+          </div>
+       <main>
+        <LineChart data={sqlData} /> 
+      </main> 
+  </div>
   );
 }
+
 export default App;
