@@ -1,63 +1,82 @@
-const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
+const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 3000;
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
 
-let sampleData = {
-  temperature: '',
-  humidity: '',
-  weather: '',
-  groundPressure: '',
-  rain: '',
-  windspeed: ''
-};
+// get aggr data
+// get data based on id
+// post on id
 
+// id is known to users and frontend.
+// backend must verify data from embed
 
-fs.readFile('data.json', 'utf8', (err, data) => {
-  if (!err) {
-    try {
-      sampleData = JSON.parse(data);
-    } catch (parseError) {
-      console.error('Error parsing JSON:', parseError);
-    }
+app.get("/:id/data", (req, res) => {
+  const id = req.params.id;
+  prisma.dataSample
+    .findMany({
+      where: {
+        scannerId: id,
+      },
+    })
+    .then((found) => {
+      res.json(found);
+    });
+
+  //res.status(404);
+});
+
+// get day minute and second to day minute second
+app.get("/search/date/:date1/:date2", (req, res) => {
+  const params = req.params;
+  let conv1 = new Date(date1);
+  let conv2 = new Date(date2);
+  if (conv1 == undefined || conv2 == undefined) {
+    res.status(400);
+  } else {
+    prisma.dataSample
+      .findMany({
+        where: {
+          taken: {
+            lte: conv1,
+            gte: conv2,
+          },
+        },
+      })
+      .then((result) => res.json(result));
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('Default Hello World');
-});
+app.post("/:id/json", (req, res) => {
+  const id = req.params.id;
 
-app.get('/home', (req, res) => {
-  res.send('Homepage send');
-});
+  const data = req.body;
 
-app.get('/data', (req, res) => {
-  res.json(sampleData);
-});
+  let convertTaken = new Date(data.taken).toISOString();
 
-app.get('/:name', (req, res) => {
-  const name = req.params.name;
-  res.send(name);
-});
-
-app.post('/receive-json', (req, res) => {
-  const receivedData = req.body;
-  sampleData = receivedData;
-  
-  // Save the received data to data.json
-  fs.writeFile('data.json', JSON.stringify(sampleData), 'utf8', (err) => {
-    if (err) {
-      console.error('Error writing to data.json:', err);
-    } else {
-      console.log('JSON data received and saved successfully');
-    }
-  });
-
-  res.json({ message: 'JSON data received and saved successfully', data: receivedData });
+  if (
+    typeof convertTaken == undefined ||
+    typeof data.avgMoisture == undefined ||
+    typeof data.avgLight == undefined ||
+    id == undefined
+  ) {
+    res.status(400);
+  } else {
+    prisma.dataSample
+      .create({
+        data: {
+          taken: convertTaken,
+          avgMoisture: data.avgMoisture,
+          avgLight: data.avgLight,
+          scannerId: id,
+        },
+      })
+      .then((ret) => res.json(ret));
+  }
 });
 
 app.listen(port, () => {

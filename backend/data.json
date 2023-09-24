@@ -1,1 +1,3 @@
-{"temperature":"30°C","humidity":"60%","weather":"Cloudy"}
+[
+    {"temperature":"30°C","humidity":"60%","weather":"Cloudy"}
+]
