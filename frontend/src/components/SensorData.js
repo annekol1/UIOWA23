@@ -50,31 +50,21 @@ function SensorData({ type, color, value }) {
     Tooltip,
     Legend
   );
-
-  const roundedSquareStyles = {
-    width: '100px', // Adjust the width and height as needed
-    height: '100px',
-    borderRadius: '15px', // Adjust the border radius to make it rounded
-    backgroundColor: 'gray.200', // Background color of the rounded square
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
+  
   return (
+    <Box>
       <div style={{display: 'flex', flexDirection:'column', alignItems:'center'}}>
         <Heading fontSize='20px'>{type}</Heading>
-        <div >
         <CircularProgress
           value={value}
           color={color}
           size="100px" 
           style={{marginBottom: '20px'}}/>
-          </div>
         <div style={{ display: 'flex' }}>
           <Line options={options} data={data} />
         </div>
       </div>
+    </Box>
   );
 }
 

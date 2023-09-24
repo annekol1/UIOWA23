@@ -6,10 +6,6 @@
     text-align: center;
   }
   
-  .app .card {
-    margin-bottom: 10px;
-  }
-  
   .app .card-header {
     color: rgb(71, 41, 41);
     font-weight: bold;
