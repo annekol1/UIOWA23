@@ -1,39 +1,20 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Routes, Route } from "react-router-dom";
+import Mainpage from "./pages/Mainpage";
 
+function App() {
+  var [posts, setPosts] = useState([]);
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/posts")
+      .then((res) => setPosts(res.data));
+  }, []);
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      posts: []
-    }
-  }
-
-  componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(response => response.json())
-      .then(json => this.setState({ posts: json }))
-  }
-
-  render() {
-    const { posts } = this.state;
-    return (
-      <div className="container">
-        <div class="jumbotron">
-          <h1 class="display-4">SoilSensing</h1>
-        </div>
-        {posts.map((post) => (
-          <div className="card" key={post.id}>
-            <div className="card-header">
-              #{post.id} {post.title}
-            </div>
-            <div className="card-body">
-              <p className="card-text">{post.body}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
+  return (
+      <Routes>
+        <Route path="/" element={<Mainpage />} />
+      </Routes>
+  );
 }
 export default App;

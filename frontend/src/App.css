@@ -1,16 +1,138 @@
-.app {
-    padding: 10px;
-  }
-  
-  .app .jumbotron {
-    text-align: center;
-  }
-  
-  .app .card {
-    margin-bottom: 10px;
-  }
-  
-  .app .card-header {
-    color: rgb(71, 41, 41);
-    font-weight: bold;
-  }
+.body {
+  background-color: #cdbed0;
+  color: white;
+  padding: 40px;
+  font-family: Arial;
+  text-align: center;
+}
+
+
+.jumbotron {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.box1 {
+  width: 300px;
+  border: 15px solid green;
+  padding: 50px;
+  margin: 20px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.body {
+  background-color: #2F2F41;
+}
+
+.grid-container {
+  display: grid;
+  grid-template: "a b" auto "a c" auto "a d" auto;
+}
+
+.logo {
+  grid-area: a;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-text {
+  grid-area: b;
+}
+
+.content-button {
+  grid-area: d;
+}
+
+.logo img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.logo-text p1 {
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  font-weight: 700px;
+  font-size: 64px;
+  display: flex;
+}
+.pie {
+  margin: 0 auto;
+  position: relative;
+  width: 200px;
+  height: 100px;
+  border-radius: 200px 200px 0 0;
+  overflow: hidden;
+}
+.pie::after {
+  transform: rotate(-60deg);      /*  set rotation degree  */
+  background: linear-gradient(to right, rgba(228,232,7,1) 0%, rgba(0,218,156,1) 100%);
+  transform-origin: center bottom;
+}
+.pie::before {
+  border: 20px solid grey;
+}
+.pie .overlay{
+  top: 20px;                      /*  match border width  */
+  left: 20px;                     /*  match border width  */
+  width: calc(100% - 40px);       /*  match border width times 2  */
+  height: calc(200% - 40px);      /*  match border width times 2  */
+  border-radius: 100%;
+  background: white;
+  z-index: 1;                     /*  move it on top of the pseudo elements  */
+}
+.pie *,
+.pie::before,
+.pie::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  box-sizing: border-box;
+}
+
+
+.button {
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}
+
+.button {
+  background-color: #FFCC00;
+  width:80%;
+  display:flex;
+  border-radius:15px;
+  height:3rem;
+  justify-content:center;
+  align-items:center;
+}
+/* graph  */
+.chart-container {
+  width: 80%;
+  max-width: 800px;
+  height: 400px;
+  margin: 0 auto;
+}
